@@ -7,10 +7,6 @@ public class Bilduma {
         this.izena = izena;
     }
 
-    public String getIzena() {
-        return izena;
-    }
-
     @Override
     public String toString() {
         return String.format(this.izena);

@@ -26,9 +26,7 @@ import java.util.Map;
 
 
 public class ComboBoxExperiments extends Application  {
-    private ListView<Argazki> listViewOfArgazki;
-    private ImageView imageView;
-    private ObservableList<Argazki> argazkiList;
+
 
     @Override
     public void start(Stage primaryStage) throws Exception {
@@ -37,11 +35,9 @@ public class ComboBoxExperiments extends Application  {
 
         ComboBox comboBox = new ComboBox();
 
-        List<String> bildumak =
-                List.of("PS4 Jokoak", "Autoak", "Futbol Ligak");
+        List<String> bildumak = List.of("PS4 Jokoak","Autoak","Futbol Ligak");
 
-        ObservableList<Bilduma> bildumaList =
-                FXCollections.observableArrayList();
+        ObservableList<Bilduma> bildumaList = FXCollections.observableArrayList();
 
         bildumak.forEach((elem) -> {
             bildumaList.add(new Bilduma(elem));
@@ -52,50 +48,53 @@ public class ComboBoxExperiments extends Application  {
         Map<String, List<Argazki>> bildumaMap = new HashMap<>();
 
         bildumaMap.put("PS4 Jokoak", List.of(
-                new Argazki("FIFA20", "FIFA20.jpg"),
-                new Argazki("NBA2k20", "NBA2k20.jpg"),
-                new Argazki("Fortnite", "Fortnite.jpeg")
+                new Argazki("FIFA20","FIFA20.jpg"),
+                new Argazki("NBA2k20","NBA2k20.jpg"),
+                new Argazki("Fortnite","Fortnite.jpeg")
         ));
 
         bildumaMap.put("Autoak", List.of(
-                new Argazki("Mercedes", "Mercedes.jpeg"),
-                new Argazki("Ferrari", "Ferrari.png"),
-                new Argazki("Audi", "Audi.png")
+                new Argazki("Mercedes","Mercedes.jpeg"),
+                new Argazki("Ferrari","Ferrari.png"),
+                new Argazki("Audi","Audi.png")
         ));
 
         bildumaMap.put("Futbol Ligak", List.of(
-                new Argazki("Premier League", "Premier League.jpeg"),
-                new Argazki("LaLiga Santander", "LaLiga Santander.jpeg"),
-                new Argazki("Bundesliga", "Bundesliga.png")
+                new Argazki("Premier League","Premier League.jpeg"),
+                new Argazki("LaLiga Santander","LaLiga Santander.jpeg"),
+                new Argazki("Bundesliga","Bundesliga.png")
         ));
 
+     
+        ObservableList<Argazki> argazkiList = FXCollections.observableArrayList();
+        comboBox.setOnAction(e->{
 
-        argazkiList =FXCollections.observableArrayList();
-            argazkiList.addAll(bildumaMap.get("PS4 Jokoak"));
-        //argazkiList.addAll(bildumaMap.get("Autoak"));
-        //argazkiList.addAll(bildumaMap.get("Futbol Ligak"));
+            argazkiList.clear();
 
-        listViewOfArgazki = new ListView<>(argazkiList);
+            if (comboBox.getValue().equals(bildumaList.get(0))){
+                argazkiList.addAll(bildumaMap.get("PS4 Jokoak"));
+            }
 
-        comboBox.setOnAction(e -> {
-                    //System.out.println(comboBox.getValue());
+            if (comboBox.getValue().equals(bildumaList.get(1))){
+                argazkiList.addAll(bildumaMap.get("Autoak"));
+            }
 
-                    argazkiList = FXCollections.observableArrayList();
-                    Bilduma aukera = (Bilduma) comboBox.getValue();
-                    String izena = aukera.getIzena();
-                    argazkiList.addAll(bildumaMap.get(izena));
-                    listViewOfArgazki.getItems().clear();
-                    listViewOfArgazki.setItems(argazkiList);
-
+            if (comboBox.getValue().equals(bildumaList.get(2))){
+                argazkiList.addAll(bildumaMap.get("Futbol Ligak"));
+            }
         });
-        imageView = new ImageView();
+
 
         comboBox.setEditable(false);
+
+        ListView listViewOfArgazki = new ListView<>(argazkiList);
+
+        ImageView imageView = new ImageView();
 
         listViewOfArgazki.getSelectionModel().selectedItemProperty().addListener(  (observable, oldValue, newValue) -> {
             if (observable.getValue() == null) return;
 
-            String fitx = observable.getValue().getFoto();
+            String fitx = ((Argazki)observable.getValue()).getFitx();
 
             try {
                 imageView.setImage(lortuIrudia(fitx /* 48x48 */));
@@ -105,94 +104,6 @@ public class ComboBoxExperiments extends Application  {
 
         });
 
-        /*
-        comboBox.getItems().add("Jokoak");
-        comboBox.getItems().add("Autoak");
-        comboBox.getItems().add("");
-
-        ListView Bilduma = new ListView();
-
-        ImageView Argazkiak = new ImageView();
-
-        comboBox.setEditable(false);
-
-        comboBox.setOnAction(e -> {
-            System.out.println( comboBox.getValue());
-
-            if (comboBox.equals("Jokoak")) {
-                Bilduma.getItems().add("FIFA");
-                Bilduma.getItems().add("NBA");
-                Bilduma.getItems().add("Fortnite");}
-            if (comboBox.equals("Autoak")) {
-                Bilduma.getItems().add("Mercedes");
-                Bilduma.getItems().add("Ferrari");
-                Bilduma.getItems().add("Audi");}
-            if (comboBox.equals("Futboleko Ligak")) {
-                Bilduma.getItems().add("Premier League");
-                Bilduma.getItems().add("Liga Santander");
-                Bilduma.getItems().add("Bundesliga");}
-            });
-
-        Bilduma.getSelectionModel().selectedItemProperty().addListener(
-                (observable, oldValue, newValue) -> {
-                    String balioa = (String) observable.getValue();
-                    if (balioa.equals("FIFA")){
-                        try {
-                            Argazkiak.setImage(lortuIrudia("txina.jpg"));
-                        } catch (IOException e) {
-                            e.printStackTrace();
-                        }
-                    }
-
-                    if (balioa.equals("NBA")){
-                        InputStream is = getClass().getResourceAsStream("/" + "senegal.jpg");
-                        Image image = new Image(is);
-                        Argazkiak.setImage(image);
-                    }
-
-                    if (balioa.equals("Fortnite")){
-                        InputStream is = getClass().getResourceAsStream("/" + "paris.jpg");
-                        Image image = new Image(is);
-                        Argazkiak.setImage(image);
-                    }
-
-                    if (balioa.equals("Mercedes")){
-                        InputStream is = getClass().getResourceAsStream("/" + "txingak.jpg");
-                        Image image = new Image(is);
-                        Argazkiak.setImage(image);
-                    }
-
-                    if (balioa.equals("Ferrari")){
-                        InputStream is = getClass().getResourceAsStream("/" + "sokatira.jpg");
-                        Image image = new Image(is);
-                        Argazkiak.setImage(image);
-                    }
-
-                    if (balioa.equals("Audi")){
-                        InputStream is = getClass().getResourceAsStream("/" + "zaldiprobak.jpg");
-                        Image image = new Image(is);
-                        Argazkiak.setImage(image);
-                    }
-
-                    if (balioa.equals("Premier League")){
-                        InputStream is = getClass().getResourceAsStream("/" + "saskibaloia.jpg");
-                        Image image = new Image(is);
-                        Argazkiak.setImage(image);
-                    }
-
-                    if (balioa.equals("Liga Santander")){
-                        InputStream is = getClass().getResourceAsStream("/" + "tenisa.jpg");
-                        Image image = new Image(is);
-                        Argazkiak.setImage(image);
-                    }
-
-                    if (balioa.equals("Bundesliga")){
-                        InputStream is = getClass().getResourceAsStream("/" + "golf.jpg");
-                        Image image = new Image(is);
-                        Argazkiak.setImage(image);
-                    }
-                });
-        */
         imageView.setFitHeight(150);
         imageView.setFitWidth(150);
 
@@ -206,6 +117,7 @@ public class ComboBoxExperiments extends Application  {
 
     private Image lortuIrudia(String location) throws IOException {
 
+        System.out.println(location);
         InputStream is = getClass().getResourceAsStream("/" + location);
         BufferedImage reader = ImageIO.read(is);
         return SwingFXUtils.toFXImage(reader, null);

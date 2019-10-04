@@ -2,19 +2,19 @@ package ehu.isad;
 
 public class Argazki {
     private String izena;
-    private String foto;
+    private String fitx;
 
-    public Argazki(String izena, String foto) {
+    public Argazki(String izena, String fitx) {
         this.izena = izena;
-        this.foto = foto;
+        this.fitx = fitx;
     }
 
     public String getIzena() {
         return this.izena;
     }
 
-    public String getFoto() {
-        return this.foto;
+    public String getFitx() {
+        return this.fitx;
     }
 
     @Override
